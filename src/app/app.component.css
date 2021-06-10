@@ -1,0 +1,12 @@
+
+
+.my-card-content {
+    padding: 16px;
+}
+.my-card__media {
+    background-image: url("https://www.tourcert.org/wp-content/uploads/2018/06/0253_Titelbild_Cuenca-FMTC.jpg");
+}
+.my-card {
+    height: 350px;
+    width: 350px;
+}
