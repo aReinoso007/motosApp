@@ -3,5 +3,14 @@
     justify-content: center;
     height: 100%;
     align-items: center;
-    background-color: #f5f5;
+    background-color: rgba(71, 75, 78, 0.333);
+}
+.login {
+    width: 100%;
+    max-width: 330px;
+    text-align: center;
+}
+
+.ancho {
+    width: 80%;
 }
