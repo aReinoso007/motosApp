@@ -107,7 +107,6 @@ export class AuthService {
     } else if (doc.active == false) {
       throw { error_code: 999, error_message: "Acceso denegado, servicio deshabilitado, consulte con el administrador." };
     } else {
-      //Actualizar cuenta
       data = {
         uid: user.uid,
         email: user.email || null,
