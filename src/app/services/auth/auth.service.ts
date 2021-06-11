@@ -4,6 +4,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { Router } from '@angular/router';
 import { User } from 'src/app/shared/services/user';
 import {  switchMap, first, take, map } from "rxjs/operators";
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     public afs: AngularFirestore,
     public afAuth: AngularFireAuth,
+    public afStorage: AngularFireStorage,
     public router: Router,
     public ngZone: NgZone
   ) { 
@@ -114,6 +116,17 @@ export class AuthService {
         provider: provider,
         lastLogin: new Date(Number(user.lastLoginAt)) || new Date()
       };
+    }
+  }
+
+  async uploadFile(id: string, file: string): Promise<any>{
+    if(file && file.length){
+      try{
+        const task = await this.afStorage.ref('profiles').child(id).put(file[0]);
+        return this.afStorage.ref(`profiles/${id}`).getDownloadURL().toPromise();
+      }catch(err){
+        console.error(err);
+      }
     }
   }
   
