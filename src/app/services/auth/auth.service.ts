@@ -42,6 +42,10 @@ export class AuthService {
     
   }
 
+  logOut(){
+    return this.afAuth.signOut();
+  }
+
   async signUp(name: string, email: string, password: string): Promise<any>{
     try{
       await this.afAuth.createUserWithEmailAndPassword(email, password);
@@ -79,6 +83,39 @@ export class AuthService {
     })
   }
 
+  async updateUserData(usertemp: any, provider: any){
+    console.log("update" + JSON.stringify(usertemp));
+    const doc: any = await this.userExists(usertemp.email);
+    console.log("doc" + JSON.stringify(doc));
+    let data: any;
+    let user: any = JSON.parse(JSON.stringify(usertemp));
+
+    console.log("doc" + JSON.stringify(doc));
+    if (doc == null || doc == "") {
+      //Crear cuenta
+      data = {
+        uid: user.uid,
+        email: user.email || null,
+        displayName: user.displayName || '',
+        photoURL: user.photoURL || "https://goo.gl/7kz9qG",
+        provider: provider,
+        lastLogin: new Date(Number(user.lastLoginAt)) || new Date(),
+        createdAt: new Date(Number(user.createdAt)) || new Date()
+      };
+    } else if (doc.active == false) {
+      throw { error_code: 999, error_message: "Acceso denegado, servicio deshabilitado, consulte con el administrador." };
+    } else {
+      //Actualizar cuenta
+      data = {
+        uid: user.uid,
+        email: user.email || null,
+        displayName: user.displayName || '',
+        photoURL: user.photoURL || "https://goo.gl/7kz9qG",
+        provider: provider,
+        lastLogin: new Date(Number(user.lastLoginAt)) || new Date()
+      };
+    }
+  }
   
 
 }
