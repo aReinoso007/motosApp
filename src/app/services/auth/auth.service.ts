@@ -45,6 +45,16 @@ export class AuthService {
     
   }
 
+  async emailPasswordLogin(email: string, password: string){
+    try{
+      const credentials = firebase.default.auth.EmailAuthProvider.credential(email, password);
+      const firebaseUser = await firebase.default.auth().signInWithCredential(credentials);
+      return await this.saveUserData(firebaseUser.user, "email");
+    }catch(err){
+      return err;
+    }
+  }
+
   logOut(){
     return this.afAuth.signOut();
   }
@@ -113,5 +123,42 @@ export class AuthService {
     }
   }
   
+
+async saveUserData(userTemp: any, provider: any){
+  const doc: any = await this.userExists(userTemp.email);
+  let data: any;
+  let user: any = JSON.parse(JSON.stringify(userTemp));
+
+  if(doc == null || doc ==""){
+      //se registra la cuenta del usuario
+      /*usuario: normal sin organizacion
+      administrador: es presidente de un grupo,
+      participante: pertenece a una organizacion
+      */
+      data = {
+        uid: user.uid,
+        email: user.email,
+        rol: 'user',
+        organizacion: '',
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        prvider: provider,
+        lastLogin: new Date(Number(user.lastLoginAt)) || new Date(),
+        createdAt: new Date(Number(user.createdAt)) || new Date()
+      };
+    }else if(doc.active == false ){
+      throw {error_code: 999, error_message: "Acesso denegado"};
+    }else{
+      data = {
+        uid: user.uid,
+        email: user.email || null,
+        provider: provider,
+        lastLogin: new Date(Number(user.lastLoginAt)) || new Date()
+      };
+    }
+    console.log("Data: ", JSON.stringify(data))
+    const userRef = this.afs.collection<any>('users');
+    return userRef.doc(`${user.uid}`).set(data, {merge: true});
+  }
 
 }

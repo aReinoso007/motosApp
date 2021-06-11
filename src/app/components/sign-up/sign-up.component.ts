@@ -23,20 +23,21 @@ export class SignUpComponent implements OnInit {
     private authService: AuthService
   ) {
     this.form = this.fb.group({
+      nombre: ['', Validators.required],
       email: ['', Validators.email],
       password: ['', Validators.required],
-      confirmPassword: ['']
-    }, {validators: this.checkPassword})
+      confirmPassword: ['', Validators.required]
+    })
    }
 
   ngOnInit(): void {
   }
 
-  checkPassword(form: FormGroup){
+  /*checkPassword(form: FormGroup){
     const password = form.get('password').value;
     const confirmedPassword = form.get('confirmPassword').value;
     return password === confirmedPassword ? null : { notSame: true}
-  }
+  }*/
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -48,19 +49,25 @@ export class SignUpComponent implements OnInit {
   }
 
   async register(){
+    console.log(
+      'Valores del formulario: ', this.form.get('email').value, ', ', this.form.get('nombre').value, ', ', this.form.get('confirmPassword').value
+    )
     let err = await this.authService.signUp(
-      this.form.value.nombre, 
-      this.form.value.email, 
-      this.form.value.password);
+      this.form.get('nombre').value, 
+      this.form.get('email').value, 
+      this.form.get('confirmPassword').value);
     if(err === undefined){
-      
+      this.authService.emailPasswordLogin(this.form.get('email').value, this.form.get('confirmPassword').value);
+      this.router.navigate(['dashboard']);
+      alert('Registro exitoso');
+    }else{
+      let e = JSON.stringify(err)
+        if (e.includes('The email address is badly formatted'))
+          alert("Debe ingresar un correo válido")
+        if (e.includes('Password should be at least 6 characters'))
+          alert("La contraseña debe tener por lo menos 6 caracteres")
     }
-    let navigationExtras: NavigationExtras ={
-      queryParams: {
-        usuario: this.usuario
-      }
-    }
-      this.router.navigate(['/datosAdicionales'], navigationExtras);
+
   }
 
 
