@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/shared/services/user';
 import {  switchMap, first, take, map } from "rxjs/operators";
 import { AngularFireStorage } from '@angular/fire/storage';
+import * as firebase from 'firebase/app';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +63,21 @@ export class AuthService {
     }
   }
 
+  registerEmailAndPassword(email: string, password: string){
+    try{
+      return this.afAuth.createUserWithEmailAndPassword(email, password);
+    }catch(err){
+      return console.error('error registrando usuario, error: ', err);
+    }
+  }
+
+  async sendVerificationEmail(){
+    return await firebase.default.auth().currentUser.sendEmailVerification()
+                .then(()=>{
+                  this.router.navigate(['verify-email']);
+                })
+  }
+
   userExists(email: string){
     console.log("userExists" + email);
     return this.afs
@@ -73,6 +89,7 @@ export class AuthService {
 
   setUserData(user: any){
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+    
     const userData: User = {
       uid: user.uid,
       email: user.email,
@@ -83,39 +100,6 @@ export class AuthService {
     return userRef.set(userData, {
       merge: true
     })
-  }
-
-  async updateUserData(usertemp: any, provider: any){
-    console.log("update" + JSON.stringify(usertemp));
-    const doc: any = await this.userExists(usertemp.email);
-    console.log("doc" + JSON.stringify(doc));
-    let data: any;
-    let user: any = JSON.parse(JSON.stringify(usertemp));
-
-    console.log("doc" + JSON.stringify(doc));
-    if (doc == null || doc == "") {
-      //Crear cuenta
-      data = {
-        uid: user.uid,
-        email: user.email || null,
-        displayName: user.displayName || '',
-        photoURL: user.photoURL || "https://goo.gl/7kz9qG",
-        provider: provider,
-        lastLogin: new Date(Number(user.lastLoginAt)) || new Date(),
-        createdAt: new Date(Number(user.createdAt)) || new Date()
-      };
-    } else if (doc.active == false) {
-      throw { error_code: 999, error_message: "Acceso denegado, servicio deshabilitado, consulte con el administrador." };
-    } else {
-      data = {
-        uid: user.uid,
-        email: user.email || null,
-        displayName: user.displayName || '',
-        photoURL: user.photoURL || "https://goo.gl/7kz9qG",
-        provider: provider,
-        lastLogin: new Date(Number(user.lastLoginAt)) || new Date()
-      };
-    }
   }
 
   async uploadFile(id: string, file: string): Promise<any>{

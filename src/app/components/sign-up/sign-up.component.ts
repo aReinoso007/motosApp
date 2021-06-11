@@ -23,14 +23,19 @@ export class SignUpComponent implements OnInit {
     private authService: AuthService
   ) {
     this.form = this.fb.group({
-      nombre: ['', Validators.required],
       email: ['', Validators.email],
       password: ['', Validators.required],
-      password2: ['', Validators.required]
-    })
+      confirmPassword: ['']
+    }, {validators: this.checkPassword})
    }
 
   ngOnInit(): void {
+  }
+
+  checkPassword(form: FormGroup){
+    const password = form.get('password').value;
+    const confirmedPassword = form.get('confirmPassword').value;
+    return password === confirmedPassword ? null : { notSame: true}
   }
 
   togglePassword() {
@@ -54,5 +59,6 @@ export class SignUpComponent implements OnInit {
     }
       this.router.navigate(['/datosAdicionales'], navigationExtras);
   }
+
 
 }
