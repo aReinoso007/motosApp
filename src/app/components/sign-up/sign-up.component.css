@@ -1,0 +1,20 @@
+.body {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+    background-color: rgba(71, 75, 78, 0.333);
+}
+.signup {
+    width: 100%;
+    max-width: 330px;
+    text-align: center;
+}
+
+.ancho {
+    width: 80%;
+}
+
+.boton {
+    height: 50px;
+}

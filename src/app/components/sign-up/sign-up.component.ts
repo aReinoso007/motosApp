@@ -52,6 +52,9 @@ export class SignUpComponent implements OnInit {
       this.form.value.nombre, 
       this.form.value.email, 
       this.form.value.password);
+    if(err === undefined){
+      
+    }
     let navigationExtras: NavigationExtras ={
       queryParams: {
         usuario: this.usuario

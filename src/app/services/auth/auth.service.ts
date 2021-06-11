@@ -32,8 +32,8 @@ export class AuthService {
     })
   }
 
-  login(email: string, password: string){
-    return this.afAuth.signInWithEmailAndPassword(email, password)
+  async login(email: string, password: string){
+    return await this.afAuth.signInWithEmailAndPassword(email, password)
     .then((r)=>{
       this.ngZone.run(()=>{
         this.router.navigate(['dashboard']);
