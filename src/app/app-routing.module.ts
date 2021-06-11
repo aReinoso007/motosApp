@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'login', pathMatch:'full'},
@@ -8,6 +9,7 @@ const routes: Routes = [
   /*Esto es lazy loading, cuando el usuario entra a esa ruta se carga el modulo*/
   { path: 'dashboard', loadChildren: () => import('./components/dashboard/dashboard.module').then(x => x.DashboardModule) },
   /*Aqui mas luego toca crear pageNotFound */
+  { path:'sign-up', component: SignUpComponent},
   { path:'**', redirectTo:'login', pathMatch:'full'}
 ];
 
