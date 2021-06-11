@@ -1,7 +1,9 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { Usuario } from 'src/app/shared/model/usuario.model';
+
 
 @Component({
   selector: 'app-sign-up',
@@ -13,6 +15,7 @@ export class SignUpComponent implements OnInit {
   form: FormGroup;
   showPassword = false;
   passwordToggleIcon = 'eye';
+  usuario: Usuario  = new Usuario();
 
   constructor(
     private fb: FormBuilder,
@@ -43,8 +46,13 @@ export class SignUpComponent implements OnInit {
     let err = await this.authService.signUp(
       this.form.value.nombre, 
       this.form.value.email, 
-      this.form.value.password)
-      
+      this.form.value.password);
+    let navigationExtras: NavigationExtras ={
+      queryParams: {
+        usuario: this.usuario
+      }
+    }
+      this.router.navigate(['/datosAdicionales'], navigationExtras);
   }
 
 }
