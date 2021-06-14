@@ -14,13 +14,17 @@ import { environment } from '../environments/environment';
 import { LoginComponent } from './components/login/login.component';
 import { SharedModule } from './components/shared/shared.module';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { LandingComponent } from './components/landing/landing.component';
+import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignUpComponent
+    SignUpComponent,
+    LandingComponent,
+    NavigationBarComponent
   ],
   imports: [
     BrowserModule,
