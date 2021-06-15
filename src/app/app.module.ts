@@ -33,7 +33,7 @@ import { NavigationBarComponent } from './components/navigation-bar/navigation-b
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

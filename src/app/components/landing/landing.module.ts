@@ -10,4 +10,6 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule
   ]
 })
-export class LandingModule { }
+export class LandingModule { 
+  
+}
