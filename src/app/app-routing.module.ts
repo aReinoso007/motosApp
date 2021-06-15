@@ -9,7 +9,7 @@ const routes: Routes = [
   {path:'', redirectTo:'landing', pathMatch:'full'},
   { path: 'login', component: LoginComponent},
   /*Esto es lazy loading, cuando el usuario entra a esa ruta se carga el modulo*/
-  { path: 'dashboard', component: DashboardComponent},
+  { path: 'dashboard/:uid', loadChildren: ()=> import('./components/dashboard/dashboard.module').then(m => m.DashboardModule)},
   /*Aqui mas luego toca crear pageNotFound */
   { path:'sign-up', component: SignUpComponent},
   { path:'landing', component: LandingComponent},
